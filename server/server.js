@@ -15,29 +15,21 @@ app.use(express.static(publicFolder));
 io.on("connection", (socket)=>{
     console.log(" New User connected");
 
+    socket.on('createMessage',(message)=>{
+        console.log("Meassage from Client", message);
+
+        io.emit('newMessage',{
+            from: message.from,
+            text: message.text,
+            createdAt: new Date().getTime()
+        })
+    });
+
     socket.on('disconnect', ()=>{
         console.log('User was disconnected');
     });
 
-
-    socket.on('createMessage',(msg)=>{
-        console.log("Meassage from Client", msg);
-    });
-
-    socket.emit('newMessage', {
-        from: "g@g.com",
-        text:"Hi Rupesh",
-        createdAt:"123"
-    });
-
-
-
-
-
-
 });
-
-
 
 server.listen(port,()=>{
     console.log(" Server is up on ", port);
