@@ -10,4 +10,19 @@ socket.on('disconnect', ()=>{
 
 socket.on('newMessage', (newMessage)=>{
     console.log('New Message', newMessage );
+
+    var li = jQuery('<li></li>');
+    li.text(`${newMessage.from} : ${newMessage.text}`);
+
+    jQuery('#messages').append(li);
+});
+
+
+jQuery('#message-form').on('submit',function(e){
+    e.preventDefault();
+
+    socket.emit('createMessage',{
+        from:"U1",
+        text: jQuery("[name= message]").val()
+    });
 })
