@@ -74,6 +74,7 @@ locButton.on('click', function(){
             long: coords.longitude
         });
     }, function(err){
+        console.log("Error", err);
         locButton.removeAttr('disabled').text("Send Location");
         return alert("Unable to fetch");
     });
