@@ -12,22 +12,37 @@ var msgTextBox = jQuery('[name=messageBox]') ;
 var msgList = jQuery('#messageList');
 
 socket.on('newMessag', (newMessage)=>{
-    console.log('New Message', newMessage );
+    var formattedTime = moment(newMessage.createdAt).format("h:mm a");
+    var template = jQuery('#message-template').html();
+    var html = Mustache.render(template, {
+        text:newMessage.text,
+        from: newMessage.from,
+        createdAt : formattedTime
+    });
 
-    var li = jQuery('<li></li>');
-    li.text(`${newMessage.from} : ${newMessage.text}`);
-
-    msgList.append(li);
+    msgList.append(html);
 });
 
 socket.on('newLocMsg', function(locMsg){
-    console.log("REcieved new loc event", locMsg);
+    var formattedTime = moment(locMsg.createdAt).format("h:mm a");
+    var template = jQuery('#location-message-template').html();
+    var html = Mustache.render(template,{
+        from:locMsg.from,
+        url:locMsg.url,
+        createdAt: formattedTime
+    });
+
+    msgList.append(html);
+
+/*     console.log("REcieved new loc event", locMsg);
     var li = jQuery('<li></li>');
     var a = jQuery('<a target="_blank">My Current Loc</a>');
-    li.text(`${locMsg.from}: `);
+
+    var formattedTime = moment(locMsg.createdAt).format("h:mm a");
+    li.text(`${locMsg.from}: ${formattedTime} `);
     a.attr('href', locMsg.url);
     li.append(a);
-    msgList.append(li);
+    msgList.append(li); */
 });
 
 
